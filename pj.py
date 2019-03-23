@@ -1,4 +1,5 @@
 import json
+import re
 
 with open("source.json", "r") as read_file:
     data = json.load(read_file)
@@ -36,3 +37,26 @@ def combine(file):
         make_list(file)
     else:
         full_convert(file)
+
+
+def raw_html(code: str):
+    return code.replace('<', '&lt;').replace('>', '&gt;')
+
+
+def make_selector(file):
+    pattern_id = r'#[\w-]+'
+    pattern_cls = r'\.[\w-]+'
+
+    for key, value in file.items():
+        _id = re.findall(pattern_id, key)
+        _cls = re.findall(pattern_cls, key)
+        tg = key.split('#' if 0 < key.find('#') < key.find('.') else '.')[0]
+        render_id = [tag[1:] for tag in _id]
+        render_cls = [tag[1:] for tag in _cls]
+
+        if render_id and not render_cls:
+            print('<{0} id="{1}">{2}</{3}>'.format(tg, ' '.join(render_id), raw_html(value), tg), end='')
+        if render_cls and not render_id:
+            print('<{0} class="{1}">{2}</{3}>'.format(tg, ' '.join(render_cls), raw_html(value), tg), end='')
+        else:
+            print('<{0} id="{1}" class="{2}">{3}</{4}>'.format(tg, ' '.join(render_id), ' '.join(render_cls), raw_html(value), tg), end='')
