@@ -12,9 +12,8 @@ def simple_convert(file):
 
 
 def full_convert(file):
-    for elem in file:
-        for key, value in elem.items():
-            print(f'<{key}>{value}</{key}>', end='')
+    for key, value in file.items():
+        print(f'<{key}>{value}</{key}>', end='')
 
 
 def make_list(file):
@@ -30,3 +29,10 @@ def make_list(file):
                 print(f'<{key}>{value}</{key}>', end='')
         print('</li>', end='')
     print('</ul>', end='')
+
+
+def combine(file):
+    if type(file) is list:
+        make_list(file)
+    else:
+        full_convert(file)
