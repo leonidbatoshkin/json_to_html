@@ -15,3 +15,18 @@ def full_convert(file):
     for elem in file:
         for key, value in elem.items():
             print(f'<{key}>{value}</{key}>', end='')
+
+
+def make_list(file):
+    print('<ul>', end='')
+    for elem in file:
+        print('<li>', end='')
+        for key, value in elem.items():
+            if type(value) is list:
+                print(f'<{key}>', end='')
+                make_list(value)
+                print(f'</{key}>', end='')
+            else:
+                print(f'<{key}>{value}</{key}>', end='')
+        print('</li>', end='')
+    print('</ul>', end='')
